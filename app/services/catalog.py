@@ -41,6 +41,11 @@ def create_customer(db: Session, data: CustomerCreate) -> Customer:
     return customer
 
 
+def list_customers(db: Session, limit: int, offset: int) -> list[Customer]:
+    stmt = select(Customer).order_by(Customer.id).limit(limit).offset(offset)
+    return list(db.scalars(stmt))
+
+
 def get_customer(db: Session, customer_id: int) -> Customer:
     customer = db.get(Customer, customer_id)
     if customer is None:

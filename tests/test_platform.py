@@ -15,6 +15,12 @@ def test_customer_invalid_email(client):
     assert r.status_code == 422
 
 
+def test_list_customers(client, customer):
+    r = client.get("/customers")
+    assert r.status_code == 200
+    assert [item["email"] for item in r.json()] == [customer["email"]]
+
+
 def test_request_id_is_echoed_and_generated(client):
     r = client.get("/health", headers={"X-Request-ID": "abc123"})
     assert r.headers["x-request-id"] == "abc123"

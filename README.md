@@ -40,6 +40,7 @@ Interactive docs: `GET /docs` (Swagger UI) and `GET /openapi.json`.
 | GET | `/products/{id}` | Get a product | 404 |
 | POST | `/products` | Create a product | 422 |
 | POST | `/customers` | Create a customer | 409 duplicate email, 422 |
+| GET | `/customers` | List customers (`limit`, `offset`) | |
 | GET | `/customers/{id}` | Get a customer | 404 |
 | POST | `/orders` | Create an order | 400 unknown customer/product, 409 insufficient stock, 422 |
 | GET | `/orders` | List orders (`customer_id`, `limit`, `offset`) | |
@@ -137,6 +138,18 @@ python -m scripts.seed             # optional
 uvicorn app.main:app --reload --port 8000
 ```
 
+### Interactive frontend
+
+The React/Vite dashboard runs separately during local development:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open `http://localhost:5173`. The Vite development server proxies `/products`, `/customers`, `/orders`, `/health`, and `/ready` to FastAPI at `http://127.0.0.1:8000`, so FastAPI must be running first.
+
 ## Testing
 
 ```bash
@@ -150,6 +163,28 @@ TEST_DATABASE_URL="postgresql+psycopg://user:pass@host:5432/test_db" pytest -q
 ```
 
 Covered: health, readiness (including DB failure), products (list/get/create/not found/validation), orders (create/get/list/invalid product/invalid customer/insufficient stock/atomic rollback), error handling and logging.
+
+## Current limitations and upcoming roadmap
+
+The current repository is intentionally limited to the core products, customers, and orders workflow. The following features are planned for upcoming development sessions:
+
+- Authentication and authorization: API authentication, protected endpoints, role-based access, and permission enforcement.
+- User accounts: associate customers with users and support account registration, login, password reset, and profile management.
+- Product management: update and delete products, and manage categories and product availability.
+- Order lifecycle: order status transitions, cancellation, refunds, shipping, and order history for authenticated users.
+- Shopping cart: cart persistence, add/remove items, quantity updates, and checkout.
+- Inventory improvements: reservations, stock history, and inventory replenishment workflows.
+- Payment processing: payment provider integration and secure payment status handling.
+- Pagination metadata: structured page totals and navigation links instead of only `limit` and `offset`.
+- Data lifecycle: soft deletion, audit trails, and retention policies.
+- Background processing: asynchronous jobs for notifications, emails, payments, and long-running operations.
+- Caching: cache frequently read catalog data and configure cache invalidation.
+- Observability: distributed tracing, metrics dashboards, alerts, and centralized log collection.
+- CI/CD: automated testing, linting, image builds, security scans, and deployment pipelines.
+- Deployment improvements: ECS/Fargate or Kubernetes deployment and native secret injection.
+- Schema evolution: additional Alembic migrations for new models and backward-compatible database changes.
+
+These items are not implemented unless explicitly changed in a later session. Authentication is not currently implemented, and API endpoints are therefore open.
 
 ## Docker
 

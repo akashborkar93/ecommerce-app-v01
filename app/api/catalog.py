@@ -61,6 +61,19 @@ def create_customer(data: CustomerCreate, db: Session = Depends(get_db)):
 
 
 @customers_router.get(
+    "",
+    response_model=list[CustomerRead],
+    summary="List customers",
+)
+def list_customers(
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+    db: Session = Depends(get_db),
+):
+    return catalog.list_customers(db, limit, offset)
+
+
+@customers_router.get(
     "/{customer_id}",
     response_model=CustomerRead,
     summary="Get a customer",
