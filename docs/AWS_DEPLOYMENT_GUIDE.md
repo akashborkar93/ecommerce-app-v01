@@ -8,6 +8,13 @@ Internet -> Route 53 -> ALB (HTTPS, ACM cert) -> EC2 (Docker, FastAPI :8000) -> 
 
 Region used in examples: `us-east-1` (matches your `~/.aws/config`). Names like `ecommerce-*` are suggestions.
 
+For the execution history of the deployed `api.akashcloud.online` stack,
+including actual tool usage, permission errors, troubleshooting, and known
+gaps in the retained command history, see
+[`AWS_DEPLOYMENT_EXECUTION_RECORD.md`](./AWS_DEPLOYMENT_EXECUTION_RECORD.md).
+The execution record describes what happened; this guide remains the
+recommended repeatable procedure.
+
 Rough monthly cost if left running 24/7 (check current pricing): ALB about $16-20, RDS db.t4g.micro about $13 plus storage, EC2 t3.micro about $8. No NAT Gateway in this design, which avoids about $33/month. Set a budget alarm first and tear down when you are done (Step 13).
 
 ---
@@ -16,7 +23,7 @@ Rough monthly cost if left running 24/7 (check current pricing): ALB about $16-2
 
 1. **Do not paste credentials into chat, files, or the repo.** If any access key was ever shared, rotate it.
 2. Do not use the root user for daily work. Use an IAM Identity Center user or an IAM user with MFA and admin-level permissions for this learning project.
-3. **Nothing in this guide is run on your PC.** AWS resources are created in the browser console. Every bash command runs on the EC2 instance through Session Manager (Step 6). The only thing you do locally is upload the project files to GitHub in your browser (Step 3). You do not need the AWS CLI or Docker on your PC.
+3. **For a new deployment, keep AWS operations in AWS.** Create resources in the browser console; run host commands on EC2 through Session Manager (Step 6). The only planned local activity is uploading project files to GitHub in your browser (Step 3). You do not need the AWS CLI or Docker on your PC. The historical deployment did use the local AWS CLI for some early provisioning; see the execution record.
 4. Billing console: create a **Budget** (for example $20/month with an email alert).
 5. Pick one region and stay in it for every resource.
 6. The Docker image is built **on the EC2 instance itself**, so it always matches the instance CPU. No ECR repository is needed. Use a `t3` (x86) instance; the `t3.micro` has 1 GiB RAM, so add the swap file in Step 6 before building.
