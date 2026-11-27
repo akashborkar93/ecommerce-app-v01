@@ -32,6 +32,10 @@ tests/       pytest suite
 
 ## API
 
+**Live demo:** [Open the E-Commerce API Swagger UI](https://api.akashcloud.online/docs) · [Health check](https://api.akashcloud.online/health)
+
+> The live API does not currently require authentication. Use demo data only; do not submit personal or sensitive information.
+
 Interactive docs: `GET /docs` (Swagger UI) and `GET /openapi.json`.
 
 | Method | Path | Description | Errors |
